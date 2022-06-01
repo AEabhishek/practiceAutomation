@@ -1,32 +1,52 @@
 package practiceAutomation;
 
-import org.openqa.selenium.By;
+import java.io.IOException;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import pom.FirstPage;
+import pom.FourthPage;
+import pom.SecondPage;
+import pom.ThirdPage;
+import practiceAutomation.Excellibrary.ExlLibrary;
 
 public class FirstScenario {
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, Throwable, IOException {
 		WebDriverManager.firefoxdriver().setup();
 		WebDriver driver=new FirefoxDriver();
-		driver.get("http://practice.automationtesting.in/");
+
+		ExlLibrary.openExcel(iconstantpath.EXCELPATH);
+		String firstName = ExlLibrary.getExcelfile("Sheet1", 1, 0);
+		String LastName = ExlLibrary.getExcelfile("Sheet1", 2, 0);
+		String email = ExlLibrary.getExcelfile("Sheet1", 1, 2);
+		String phoneNumber = ExlLibrary.getExcelfile("Sheet1", 1, 3);
+		String Address = ExlLibrary.getExcelfile("Sheet1", 1, 4);
+		String city = ExlLibrary.getExcelfile("Sheet1", 1, 5);
+		String pincode = ExlLibrary.getExcelfile("Sheet1", 1, 6);
+
+		FirstPage firstpage=new FirstPage(driver);
+		SecondPage secondpage=new SecondPage(driver);
+		ThirdPage thirdpage=new ThirdPage(driver);
+		FourthPage fourthPage=new FourthPage(driver);
+		driver.get(iconstantpath.URL);
 		JavascriptExecutor js=(JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,7000)");
+		js.executeScript("window.scrollBy(0,4000)");
+		firstpage.firstpage();
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//img[@title='Thinking in HTML']")).click();
+		secondpage.addbasket();
+		secondpage.viewbasket();
 		Thread.sleep(2000);
 		js.executeScript("window.scrollBy(0,4000)");
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//a[@href='/product/thinking-in-html/?add-to-cart=181']")).click();
+		thirdpage.Procedtocheckout();
 		Thread.sleep(2000);
-		driver.findElement(By.xpath("//a[@title='View Basket']")).click();
+		fourthPage.mandatoryField(firstName, LastName, email, phoneNumber, Address, city, pincode);
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//a[@href='http://practice.automationtesting.in/checkout/']")).click();
-		Thread.sleep(3000);
-		driver.findElement(By.xpath("//input[@id='billing_first_name']")).sendKeys("")
-		
+
+
 	}
 
 }
